@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/hooks/use-toast"
 import {
   Select,
   SelectContent,
@@ -57,6 +58,7 @@ const quickActions = [
 export function RightPanel() {
   const [selectedUrgency, setSelectedUrgency] = useState("all")
   const [systemStatus, setSystemStatus] = useState("online")
+  const { toast } = useToast()
 
   const filteredAlerts = quickAlerts.filter(
     alert => selectedUrgency === "all" || alert.urgency === selectedUrgency
@@ -77,6 +79,14 @@ export function RightPanel() {
       case "system": return Clock
       default: return Bell
     }
+  }
+
+  const handleQuickAction = (action: string, label: string) => {
+    toast({
+      title: "Action Executed",
+      description: `${label} action has been performed successfully.`,
+      duration: 3000,
+    })
   }
 
   return (
@@ -149,7 +159,7 @@ export function RightPanel() {
               key={action.action}
               variant="ghost"
               className="w-full justify-start h-9"
-              onClick={() => console.log(`Action: ${action.action}`)}
+              onClick={() => handleQuickAction(action.action, action.label)}
             >
               <action.icon className="mr-2 h-4 w-4" />
               {action.label}

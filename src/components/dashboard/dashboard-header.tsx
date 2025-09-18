@@ -2,6 +2,7 @@ import { Search, MoreVertical, Bell } from "lucide-react"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useToast } from "@/hooks/use-toast"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +12,16 @@ import {
 import { Badge } from "@/components/ui/badge"
 
 export function DashboardHeader() {
+  const { toast } = useToast()
+
+  const handleHeaderAction = (action: string) => {
+    toast({
+      title: "Action Executed",
+      description: `${action} has been performed.`,
+      duration: 3000,
+    })
+  }
+
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
       <div className="flex items-center gap-4">
@@ -25,7 +36,12 @@ export function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="relative">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="relative"
+          onClick={() => handleHeaderAction("Notifications viewed")}
+        >
           <Bell className="h-5 w-5" />
           <Badge 
             variant="destructive" 
@@ -42,13 +58,13 @@ export function DashboardHeader() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleHeaderAction("Quick Actions opened")}>
               <span>Quick Actions</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleHeaderAction("System Status checked")}>
               <span>System Status</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleHeaderAction("Emergency Alert sent")}>
               <span>Emergency Alert</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

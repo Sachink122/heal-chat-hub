@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useToast } from "@/hooks/use-toast"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,6 +54,7 @@ export function ChatbotInterface() {
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [newMessage, setNewMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const { toast } = useToast()
 
   const handleSendMessage = () => {
     if (!newMessage.trim()) return
@@ -88,6 +90,14 @@ export function ChatbotInterface() {
     }
   }
 
+  const handleChatAction = (action: string) => {
+    toast({
+      title: "Chat Action",
+      description: `${action} has been executed.`,
+      duration: 3000,
+    })
+  }
+
   return (
     <Card className="flex flex-col h-[calc(100vh-12rem)]">
       <CardHeader className="border-b">
@@ -110,10 +120,18 @@ export function ChatbotInterface() {
             <Badge variant="outline" className="text-success border-success">
               Emergency Mode Active
             </Badge>
-            <Button variant="ghost" size="icon">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => handleChatAction("Voice call initiated")}
+            >
               <Phone className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => handleChatAction("Video call initiated")}
+            >
               <Video className="h-4 w-4" />
             </Button>
             <DropdownMenu>
@@ -123,10 +141,18 @@ export function ChatbotInterface() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>View History</DropdownMenuItem>
-                <DropdownMenuItem>Export Chat</DropdownMenuItem>
-                <DropdownMenuItem>Emergency Alert</DropdownMenuItem>
-                <DropdownMenuItem>Transfer to Doctor</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleChatAction("Chat history viewed")}>
+                  View History
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleChatAction("Chat exported")}>
+                  Export Chat
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleChatAction("Emergency alert sent")}>
+                  Emergency Alert
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handleChatAction("Transferred to doctor")}>
+                  Transfer to Doctor
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -175,7 +201,11 @@ export function ChatbotInterface() {
 
       <div className="border-t p-4">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => handleChatAction("File attachment opened")}
+          >
             <Paperclip className="h-4 w-4" />
           </Button>
           <div className="flex-1 relative">
@@ -190,6 +220,7 @@ export function ChatbotInterface() {
               variant="ghost"
               size="icon"
               className="absolute right-1 top-1/2 -translate-y-1/2"
+              onClick={() => handleChatAction("Voice recording started")}
             >
               <Mic className="h-4 w-4" />
             </Button>
